@@ -189,6 +189,15 @@ docker-compose up
 ### Screenshots
 <img width="1357" height="478" alt="Screenshot 2025-07-19 030552" src="https://github.com/user-attachments/assets/f8c9c692-3401-40a6-9fcd-b591f78794bd" />
 
+----
+## Docker Containers Running
+```bash
+docker ps
+```
+### Screenshots
+<img width="1355" height="283" alt="image" src="https://github.com/user-attachments/assets/225364d8-2178-44a1-be19-fc7b36d37792" />
+
+
 
 ## Stop All Containers
 ```bash
