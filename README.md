@@ -17,7 +17,7 @@ shakti-Blue-green-Deployment/
 ├── frontend-blue/
 ├── frontend-green/
 ```
-w
+
 ### 🔧 1. Install Dependencies
 
 ```bash
@@ -72,5 +72,116 @@ node server.js
 <img width="1228" height="675" alt="image" src="https://github.com/user-attachments/assets/14c5140d-d6d8-4910-8d2a-382c936eeee8" />
 
 
+# 🐳 Step 2: Containerization - Blue-Green Deployment Skill Test
 
+This section documents the containerization of a full-stack Node.js + MongoDB application with **blue-green frontend architecture** using **Docker** and `docker-compose`.
 
+---
+
+## 📁 Project Structure
+```bash
+├── backend/
+│ ├── Dockerfile
+│ └── ...
+├── frontend-blue/
+│ ├── Dockerfile
+│ └── ...
+├── frontend-green/
+│ ├── Dockerfile
+│ └── ...
+├── docker-compose.yml
+```
+
+## ⚙️ Dockerfiles
+
+Each component (backend, frontend-blue, frontend-green) includes a Dockerfile.
+
+### ✅ Backend Dockerfile (port: 5000)
+
+```dockerfile
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 5000
+CMD ["node", "server.js"]
+```
+
+### Frontend-Blue Dockerfile (port: 3100)
+```bash
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3100
+CMD ["node", "server.js"]
+```
+
+### Frontend-Green Dockerfile (port: 3200)
+```bash
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3200
+CMD ["node", "server.js"]
+```
+
+📦 docker-compose.yml
+```bash
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/bluegreenDB
+
+  frontend-blue:
+    build: ./frontend-blue
+    container_name: frontend-blue
+    ports:
+      - "3100:3100"
+    depends_on:
+      - backend
+
+  frontend-green:
+    build: ./frontend-green
+    container_name: frontend-green
+    ports:
+      - "3200:3200"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
+```
+
+## Build All Services
+```bash
+docker-compose build
+```
+## Run All Containers
+```bash
+docker-compose up
+```
+## Stop All Containers
+```bash
+docker-compose down
+```
