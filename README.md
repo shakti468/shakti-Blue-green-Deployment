@@ -17,7 +17,7 @@ shakti-Blue-green-Deployment/
 ├── frontend-blue/
 ├── frontend-green/
 ```
-
+w
 ### 🔧 1. Install Dependencies
 
 ```bash
