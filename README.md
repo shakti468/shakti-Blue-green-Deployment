@@ -58,7 +58,6 @@ node server.js
 - Frontend-green: http://localhost:3200
 
 ## 📸 Screenshots
-Add the following screenshots as proof of working local setup:
 
 ### ✅ Backend server running with health check
 <img width="1650" height="713" alt="Screenshot 2025-07-18 204435" src="https://github.com/user-attachments/assets/e2800935-36f9-4cce-a8d4-0d91197cac4b" />
