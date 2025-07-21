@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-green
+  template:
+    metadata:
+      labels:
+        app: frontend-green
+    spec:
+      containers:
+        - name: frontend-green
+          image: shakti827/frontend-green
+          ports:
+            - containerPort: 3200
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-green
+spec:
+  selector:
+    app: frontend-green
+  ports:
+    - protocol: TCP
+      port: 3200
+      targetPort: 3200
+  type: NodePort

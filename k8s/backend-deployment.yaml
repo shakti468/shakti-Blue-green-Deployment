@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: shakti827/backend-bluegreen
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongodb:27017/bluegreenDB
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

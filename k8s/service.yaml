@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend-green  # 👈 Change to frontend-green to switch
+  ports:
+    - port: 3000
+      targetPort: 3200  # 👈 Change to 3200 if pointing to green
+  type: NodePort
