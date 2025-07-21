@@ -197,9 +197,148 @@ docker ps
 ### Screenshots
 <img width="1355" height="283" alt="image" src="https://github.com/user-attachments/assets/225364d8-2178-44a1-be19-fc7b36d37792" />
 
+# 🚀 Blue-Green Deployment on Kubernetes (Minikube)
+
+This project demonstrates Blue-Green Deployment using **Node.js + MongoDB** with Kubernetes on Minikube.
+
+---
+
+## 📂 Project Structure
+
+```
+shakti-Blue-green-Deployment/
+└── k8s/
+    ├── mongodb-deployment.yaml
+    ├── backend-deployment.yaml
+    ├── frontend-blue-deployment.yaml
+    ├── frontend-green-deployment.yaml
+    └── service.yaml
+```
+## Start Minikube
+```bash
+minikube start
+```
+## Apply All YAMLs
+```bash
+kubectl apply -f k8s/mongodb-deployment.yaml
+kubectl apply -f k8s/backend-deployment.yaml
+kubectl apply -f k8s/frontend-blue-deployment.yaml
+kubectl apply -f k8s/frontend-green-deployment.yaml
+```
+### Screenshots
+<img width="901" height="256" alt="image" src="https://github.com/user-attachments/assets/b805ba19-74d8-44a4-9b6b-2db02a4888f6" />
+
+---
+
+## Verify Deployments
+```bash
+kubectl get pods
+kubectl get services
+```
+### Screenshots
+<img width="952" height="403" alt="image" src="https://github.com/user-attachments/assets/b990085c-efaf-4f51-b25b-ed093fc1c91c" />
+<img width="882" height="298" alt="image" src="https://github.com/user-attachments/assets/01348587-5d98-44ac-905a-3dc2abd881d3" />
+
+---
+## minikube service to open services in your browser:
+```bash
+minikube service frontend-blue
+minikube service frontend-green
+```
+### Screenshots 
+<img width="892" height="620" alt="image" src="https://github.com/user-attachments/assets/ff2bf4ab-2b0f-4a8c-a3eb-0e32160944fc" />
+<img width="1370" height="932" alt="image" src="https://github.com/user-attachments/assets/e3fa0768-7587-452d-8477-3bdba2b58baf" />
+<img width="1377" height="955" alt="image" src="https://github.com/user-attachments/assets/83aa7550-e838-4214-bc2f-cef4a084d88d" />
+
+
+## Expose the Frontend Application
+
+We expose both frontend versions via individual Kubernetes Services and expose one (`frontend`) to access externally.
+
+### 🛠️ Service Configuration (`k8s/service.yaml`)
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: frontend-blue  # This will be switched during deployment
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30080
+```
+
+### 🔌 Apply the Service
+
+```bash
+kubectl apply -f k8s/service.yaml
+```
+### Screenshots
+<img width="1368" height="137" alt="image" src="https://github.com/user-attachments/assets/8d5e8ba9-dcc3-4b1c-a6b0-13b3bbe45c41" />
+
+## ✅ Step 4: Switch Between Blue and Green Frontend
+
+This step switches traffic between the blue and green frontend versions with **zero downtime**.
+
+---
+
+### 🔁 Switching to Blue Frontend
+
+1. Edit `service.yaml`:
+    ```yaml
+    selector:
+      app: frontend-blue
+    ```
+
+2. Apply the update:
+    ```bash
+    kubectl apply -f k8s/service.yaml
+    ```
+
+3. Verify:
+    ```bash
+    kubectl describe svc frontend
+    ```
+
+<img width="812" height="486" alt="image" src="https://github.com/user-attachments/assets/e5695b71-1955-427a-8280-cec105d51b92" />
+
+
+---
+
+### 🔁 Switching to Green Frontend
+
+1. Edit `service.yaml`:
+    ```yaml
+    selector:
+      app: frontend-green
+    ```
+
+2. Apply the update:
+    ```bash
+    kubectl apply -f k8s/service.yaml
+    ```
+
+3. Verify:
+    ```bash
+    kubectl describe svc frontend
+    ```
+
+<img width="968" height="470" alt="image" src="https://github.com/user-attachments/assets/fcea96cb-f02b-41b9-ac12-94e3c11c0d7f" />
+
+
+---
 
 
 ## Stop All Containers
 ```bash
 docker-compose down
 ```
+### Screenshots 
+<img width="881" height="237" alt="image" src="https://github.com/user-attachments/assets/49f317f1-ee5a-4d71-a909-4a294f85a8fc" />
+
+
+---
